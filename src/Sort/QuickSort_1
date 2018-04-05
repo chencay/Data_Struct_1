@@ -1,0 +1,63 @@
+//优化版的快速排序，因为对于小数组在插入排序情况下很简便快速所以判断小数组的情况下采用插入排序
+import java.util.Arrays;  
+
+public class QuickSort_1 {  
+      
+    private final static int CUTOFF = 10;   
+    /* 
+     * 三数中值分割法+插入排序（小数组情况下）
+     */  
+    public static void qSort(int[] a,int left,int right){  
+        if(left + CUTOFF >= right) insertion(a,left,right);//如果小数组，则采用插入排序
+        else{   
+            if(left >= right) return;  
+            int p = median3(a,left,right);  
+            int i = left,j = right-1;//设置左起始点，右起始点 
+            while(true){  
+                while(a[++i] < p){}  
+                while(a[--j] > p){}  
+                if(i<j)   
+                    swap(a,i,j);  
+                else   
+                    break;  
+            }  
+            swap(a,right-1,i);//当j>=i则把i处的数值放到right-1的位置  
+            qSort(a,left,i-1);//左侧递归分析 
+            qSort(a,i+1,right);//右侧递归分析
+        }  
+    }  
+    //三数中值分割法
+    public static int median3(int[] a,int low,int high){  
+        int mid = (low+high)/2;  
+        if(a[low] > a[mid]) swap(a,low,mid);  
+        if(a[low] > a[high] ) swap(a,low,high);  
+        if(a[mid] > a[high]) swap(a,mid,high);  
+        swap(a,mid,high-1);//hide pivot  
+        return a[high-1];//return pivot  
+    }  
+    //互换数值
+    public static void swap(int[] a,int i,int j){  
+        int temp = a[i];  
+        a[i] = a[j];  
+        a[j] = temp;  
+    }  
+    //插入排序
+    public static void insertion(int[] a,int lo,int hi){   
+        for(int i=lo;i<=hi;i++){  
+            for(int j=i;j>0&&a[j]<a[j-1];j--){  
+                swap(a,j,j-1);  
+            }  
+        }  
+    }  
+    public static void main (String[] args){  
+//        double a[] = new double[100000];//data  
+//        for(int i=0;i<a.length;i++){  
+//                a[i] = (double)Math.random()*100000;  
+//        }  
+//  
+    	int[] a={8,1,4,9,0,3,5,2,7,6,11,19,20};
+        qSort(a,0,a.length-1);  
+        long after = System.currentTimeMillis();   
+        System.out.println(Arrays.toString(a));  
+    }  
+} 

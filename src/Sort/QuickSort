@@ -1,0 +1,58 @@
+//快速排序
+
+public class QuickSort {
+	//三数中值分割法获取枢纽元
+	private int midpivot(int[] a,int left,int right){
+		int center=(left+right)/2;
+		//将一个数组最左最右以及中间的数值进行比较排序，由小到大
+		if(a[center]<a[left])
+			swap(a,left,center);
+		if(a[right]<a[left])
+			swap(a,left,right);
+		if(a[right]<a[center])
+			swap(a,center, right);
+		//将枢纽元与倒数第二个进行置换，因为最后一个即最右已经与枢纽元比较且比枢纽元大
+		swap(a,center,right-1);
+		int pivot=a[right-1];//即枢纽元
+		return pivot;
+	}
+	//互换数值
+	private void swap(int[] array,int a,int b){
+		int tmp=array[a];
+		array[a]=array[b];
+		array[b]=tmp;
+	}
+	//快速排序，递归
+	private void quicksort(int[] a,int left,int right){
+		if(left>=right)return;//【注意】很重要，首先需要判断下left与right的关系
+		else{
+			int pivot=midpivot(a, left, right);//获取枢纽元
+			int i=left;//左起始点，向右移动
+			int j=right-1;//右起始点，向左移动
+			while(true){
+				while(a[++i]<a[pivot])//从左向右开始 持续 读取数据与枢纽元比较
+					;//++i，因为三数中值法已经将left与pivot枢纽元比较并排序了，故从left+1开始
+				while(a[--j]>a[pivot])//从右开发向左 持续 读取数据与枢纽元比较
+					;//--j，同上，其中right-1是pivot枢纽元，故从right-2开始
+				//两个while挑选出i与j，判断i与j大小关系，i<j则互换，否则跳出循环，不然会一直死循环
+				if(i<j)
+					swap(a,i,j);//左比枢纽元大&&右比枢纽元小，则互换左右数据
+				else 
+					break;
+			}
+			//若此时左右下标交错，则令此时的left数值与pivot枢纽元数值互换
+			swap(a, right-1,i);
+			quicksort(a, left, i-1);
+			quicksort(a, i+1, right);
+		}
+	}
+	public static void main(String[] args) {
+		QuickSort qs=new QuickSort();
+		int[] a={8,1,4,9,0,3,5,2,7,6};
+		qs.quicksort(a, 0, a.length-1);
+		for(int i:a){
+			System.out.print(i+" ");
+		}
+	}
+
+}

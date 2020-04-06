@@ -1,3 +1,3 @@
-# Data_Struct_1
-Sorting Algorithm
+# Sorting Algorithm
+
 基础的排序算法系列代码
